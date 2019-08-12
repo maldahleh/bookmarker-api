@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { uuid } from 'uuid/v1';
 import { Bookmark } from './bookmarks.model';
+
+import uuidv1 = require('uuid/v1');
+import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 
 @Injectable()
 export class BookmarksService {
@@ -10,9 +12,11 @@ export class BookmarksService {
     return this.bookmarks;
   }
 
-  createTask(url: string): Bookmark {
+  createBookmark(createBookmarkDto: CreateBookmarkDto): Bookmark {
+    const { url } = createBookmarkDto;
+
     const bookmark: Bookmark = {
-      id: uuid(),
+      id: uuidv1(),
       url,
     };
 

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { BookmarksService } from './bookmarks.service';
 import { Bookmark } from './bookmarks.model';
+import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 
 @Controller('bookmarks')
 export class BookmarksController {
@@ -12,7 +13,7 @@ export class BookmarksController {
   }
 
   @Post()
-  createTask(@Body() body) {
-    console.log(body);
+  createBookmark(@Body() createBookmarkDto: CreateBookmarkDto) {
+    return this.bookmarksService.createBookmark(createBookmarkDto);
   }
 }
