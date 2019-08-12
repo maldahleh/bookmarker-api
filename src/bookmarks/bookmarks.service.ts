@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as uuid from 'uuid/v1';
 
 import { Bookmark } from './bookmarks.model';
@@ -13,7 +13,12 @@ export class BookmarksService {
   }
 
   getBookmarkById(id: string): Bookmark {
-    return this.bookmarks.find(bookmark => bookmark.id === id);
+    const found = this.bookmarks.find(bookmark => bookmark.id === id);
+    if (!found) {
+      throw new NotFoundException();
+    }
+
+    return found;
   }
 
   createBookmark(createBookmarkDto: CreateBookmarkDto): Bookmark {
@@ -29,6 +34,10 @@ export class BookmarksService {
   }
 
   deleteBookmark(id: string): void {
+    const length = this.bookmarks.length;
     this.bookmarks = this.bookmarks.filter(filtered => filtered.id !== id);
+    if (this.bookmarks.length === length) {
+      throw new NotFoundException();
+    }
   }
 }

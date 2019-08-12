@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { BookmarksService } from './bookmarks.service';
 import { Bookmark } from './bookmarks.model';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
@@ -18,6 +18,7 @@ export class BookmarksController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createBookmark(@Body() createBookmarkDto: CreateBookmarkDto): Bookmark {
     return this.bookmarksService.createBookmark(createBookmarkDto);
   }
