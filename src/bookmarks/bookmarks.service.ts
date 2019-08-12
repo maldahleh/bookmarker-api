@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Bookmark } from './bookmarks.model';
+import * as uuid from 'uuid/v1';
 
-import uuidv1 = require('uuid/v1');
+import { Bookmark } from './bookmarks.model';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 
 @Injectable()
@@ -12,15 +12,23 @@ export class BookmarksService {
     return this.bookmarks;
   }
 
+  getBookmarkById(id: string): Bookmark {
+    return this.bookmarks.find(bookmark => bookmark.id === id);
+  }
+
   createBookmark(createBookmarkDto: CreateBookmarkDto): Bookmark {
     const { url } = createBookmarkDto;
 
     const bookmark: Bookmark = {
-      id: uuidv1(),
+      id: uuid(),
       url,
     };
 
     this.bookmarks.push(bookmark);
     return bookmark;
+  }
+
+  deleteBookmark(id: string): void {
+    this.bookmarks = this.bookmarks.filter(filtered => filtered.id !== id);
   }
 }
