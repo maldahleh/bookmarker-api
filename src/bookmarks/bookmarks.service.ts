@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as uuid from 'uuid/v1';
 
-import { Bookmark } from './bookmarks.model';
+import { Bookmark } from './bookmark.model';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 
 @Injectable()
