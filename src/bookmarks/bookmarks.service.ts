@@ -1,19 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import * as uuid from 'uuid/v1';
-
-import { Bookmark } from './bookmark.model';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
+import { BookmarkRepository } from './bookmark.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Bookmark } from './bookmark.entity';
 
 @Injectable()
 export class BookmarksService {
-  private bookmarks: Bookmark[] = [];
+  constructor(
+    @InjectRepository(BookmarkRepository)
+    private bookmarkRepository: BookmarkRepository,
+  ) {}
 
-  getAllBookmarks(): Bookmark[] {
-    return this.bookmarks;
+  getAllBookmarks(): Promise<Bookmark[]> {
+    return this.bookmarkRepository.getBookmarks();
   }
 
-  getBookmarkById(id: string): Bookmark {
-    const found = this.bookmarks.find(bookmark => bookmark.id === id);
+  async getBookmarkById(id: number): Promise<Bookmark> {
+    const found = await this.bookmarkRepository.findOne(id);
     if (!found) {
       throw new NotFoundException();
     }
@@ -21,22 +24,13 @@ export class BookmarksService {
     return found;
   }
 
-  createBookmark(createBookmarkDto: CreateBookmarkDto): Bookmark {
-    const { url } = createBookmarkDto;
-
-    const bookmark: Bookmark = {
-      id: uuid(),
-      url,
-    };
-
-    this.bookmarks.push(bookmark);
-    return bookmark;
+  async createBookmark(createBookmarkDto: CreateBookmarkDto): Promise<Bookmark> {
+    return this.bookmarkRepository.createBookmark(createBookmarkDto);
   }
 
-  deleteBookmark(id: string): void {
-    const length = this.bookmarks.length;
-    this.bookmarks = this.bookmarks.filter(filtered => filtered.id !== id);
-    if (this.bookmarks.length === length) {
+  async deleteBookmark(id: number): Promise<void> {
+    const result = await this.bookmarkRepository.delete(id);
+    if (result.affected === 0) {
       throw new NotFoundException();
     }
   }
