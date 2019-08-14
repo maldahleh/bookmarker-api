@@ -11,7 +11,7 @@ export class BookmarksService {
     private bookmarkRepository: BookmarkRepository,
   ) {}
 
-  getAllBookmarks(): Promise<Bookmark[]> {
+  async getAllBookmarks(): Promise<Bookmark[]> {
     return this.bookmarkRepository.getBookmarks();
   }
 
