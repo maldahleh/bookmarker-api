@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../auth/user.entity';
 
 @Entity()
 export class Bookmark extends BaseEntity {
@@ -7,4 +8,10 @@ export class Bookmark extends BaseEntity {
 
   @Column()
   url: string;
+
+  @ManyToOne(type => User, user => user.bookmarks, { eager: false })
+  user: User;
+
+  @Column()
+  userId: number;
 }
