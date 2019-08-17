@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { BookmarksService } from './bookmarks.service';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 import { Bookmark } from './bookmark.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('bookmarks')
+@UseGuards(AuthGuard())
 export class BookmarksController {
   constructor(private bookmarksService: BookmarksService) {}
 
